@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^api/search$ api.php?action=search [QSA,L]
+RewriteRule ^api/book$ api.php?action=book [QSA,L]

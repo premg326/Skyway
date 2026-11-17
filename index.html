@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f7f8fb">
+  <title>Skyway — Flights made simple</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="Skyway home"><span class="brand-mark">↗</span> skyway<span class="brand-dot">.</span></a>
+    <nav class="main-nav" aria-label="Main navigation"><a class="active" href="#search">Flights</a><a href="#destinations">Explore</a><a href="#why">Why Skyway</a></nav>
+    <div class="top-actions"><button class="text-btn" id="manageBtn">Manage booking</button><button class="sign-in" id="signInBtn"><span class="user-icon">◉</span> Sign in</button><button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button></div>
+  </header>
+  <main id="top">
+    <section class="hero" id="search">
+      <div class="hero-image" aria-hidden="true"></div>
+      <div class="hero-copy"><div class="eyebrow"><span></span> YOUR NEXT CHAPTER STARTS HERE</div><h1>Somewhere<br>is calling<span>.</span></h1><p>Find your flight. Feel the anticipation.<br>Your next great story starts with Skyway.</p></div>
+      <div class="search-wrap">
+        <div class="trip-tabs" role="tablist"><button class="trip-tab selected" data-trip="roundtrip">Round trip</button><button class="trip-tab" data-trip="oneway">One way</button><button class="trip-tab" data-trip="multicity">Multi-city</button><span class="trip-spacer"></span><label class="class-select">✧ <select id="cabin"><option>Economy</option><option>Premium economy</option><option>Business</option><option>First class</option></select><span>⌄</span></label></div>
+        <form id="searchForm" class="search-form">
+          <label class="field location-field"><span class="field-label">FROM</span><span class="field-content"><span class="field-icon">⌖</span><input id="origin" value="New York (JFK)" autocomplete="off" required><button type="button" class="swap" id="swapBtn" aria-label="Swap airports">⇄</button></span></label>
+          <label class="field location-field"><span class="field-label">TO</span><span class="field-content"><span class="field-icon destination-icon">⌖</span><input id="destination" placeholder="Where to?" autocomplete="off" required></span></label>
+          <label class="field date-field"><span class="field-label">DEPART</span><span class="field-content"><span class="field-icon">▦</span><input id="departDate" type="date" required></span></label>
+          <label class="field date-field return-field"><span class="field-label">RETURN</span><span class="field-content"><span class="field-icon">▦</span><input id="returnDate" type="date"></span></label>
+          <label class="field passenger-field"><span class="field-label">TRAVELERS</span><span class="field-content"><span class="field-icon">♙</span><select id="passengers"><option value="1">1 traveler</option><option value="2">2 travelers</option><option value="3">3 travelers</option><option value="4">4 travelers</option><option value="5">5 travelers</option><option value="6">6 travelers</option></select></span></label>
+          <button class="search-btn" type="submit"><span>Search flights</span><b>→</b></button>
+        </form>
+        <div class="search-foot"><span><i class="check">✓</i> No hidden fees</span><span><i class="check">✓</i> Flexible booking options</span><span class="secure">⌑ Secure booking</span></div>
+      </div>
+    </section>
+    <section class="trust-row"><div><strong>2M+</strong><span>happy travelers</span></div><div><strong>180+</strong><span>destinations</span></div><div><strong>4.9<span class="star">★</span></strong><span>average rating</span></div><div class="trust-quote">“Travel should feel like the beginning.” <span>— that’s our promise.</span></div></section>
+    <section class="results-section hidden" id="results"><div class="section-heading"><div><div class="eyebrow dark-eyebrow">YOUR JOURNEY, YOUR WAY</div><h2>Flights to <span id="resultDestination">somewhere</span></h2></div><button id="editSearch" class="edit-search">← Edit search</button></div><div class="results-meta" id="resultsMeta"></div><div id="flightList" class="flight-list"></div></section>
+    <section class="destinations" id="destinations"><div class="section-heading"><div><div class="eyebrow dark-eyebrow">A LITTLE INSPIRATION</div><h2>Where to next?</h2></div><a class="view-all" href="#search">Explore all destinations <span>→</span></a></div><div class="destination-grid">
+      <button class="destination-card card-tokyo" data-place="Tokyo (HND)"><span class="card-scrim"></span><span class="card-info"><span class="card-tag">CULTURE &amp; CITY</span><strong>Tokyo</strong><small>From $589 <i>↗</i></small></span></button>
+      <button class="destination-card card-lisbon" data-place="Lisbon (LIS)"><span class="card-scrim"></span><span class="card-info"><span class="card-tag">COASTAL ESCAPE</span><strong>Lisbon</strong><small>From $412 <i>↗</i></small></span></button>
+      <button class="destination-card card-bali" data-place="Bali (DPS)"><span class="card-scrim"></span><span class="card-info"><span class="card-tag">SLOW DOWN</span><strong>Bali</strong><small>From $729 <i>↗</i></small></span></button>
+      <button class="destination-card card-reykjavik" data-place="Reykjavik (KEF)"><span class="card-scrim"></span><span class="card-info"><span class="card-tag">WILD &amp; FREE</span><strong>Reykjavik</strong><small>From $368 <i>↗</i></small></span></button>
+    </div></section>
+    <section class="why-section" id="why"><div><div class="eyebrow dark-eyebrow">THE SKYWAY DIFFERENCE</div><h2>Good trips begin<br>before takeoff.</h2><p>We make the little things feel easy, so you can focus on the big things waiting out there.</p></div><div class="benefit-grid"><article><span class="benefit-icon">✳</span><h3>Plans change. We get it.</h3><p>Flexible fares and clear options give you room to move.</p></article><article><span class="benefit-icon">♡</span><h3>People, here to help.</h3><p>Real travel support whenever you need a hand.</p></article><article><span class="benefit-icon">⌁</span><h3>Every detail, upfront.</h3><p>See the full price and what’s included before you book.</p></article></div></section>
+    <section class="newsletter"><div><div class="eyebrow">A LITTLE WANDERLUST, DELIVERED</div><h2>Good things are out there.</h2><p>Get flight deals and destination ideas, straight to your inbox.</p></div><form id="newsletterForm"><input type="email" placeholder="Your email address" required aria-label="Email address"><button type="submit">Count me in <span>→</span></button></form></section>
+  </main>
+  <footer><a class="brand" href="#top"><span class="brand-mark">↗</span> skyway<span class="brand-dot">.</span></a><span>© 2025 Skyway Travel Co.</span><span>Made for the way you want to go.</span><div><a href="#why">Help</a><a href="#why">Privacy</a><a href="#why">Terms</a></div></footer>
+  <div class="modal-backdrop hidden" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal"><button class="modal-close" id="closeModal" aria-label="Close">×</button><div id="modalContent"></div></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="app.js"></script>
+</body>
+</html>

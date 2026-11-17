@@ -1,0 +1,9 @@
+.git
+.env
+node_modules
+data
+README.md
+schema.sql
+api.php
+.htaccess
+render.yaml
