@@ -19,3 +19,70 @@ body{font-size:16px}
 .book-btn{font-size:13px}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #79a84e;outline-offset:3px}
 @media(max-width:620px){.field-label{font-size:9px}.field input,.field select,.class-select select{font-size:12px}.field input[type=date]{font-size:11px}.search-btn,.trip-tab{font-size:11px}.search-foot{font-size:9px}.view-all{font-size:11px}.trust-row>div>span{font-size:10px}.card-tag,.card-info small{font-size:10px}.benefit-grid p{font-size:12px}.newsletter form button{font-size:12px}.newsletter input{font-size:13px}footer{font-size:11px}}
+
+/* Account, booking-management and multi-city demo flows. */
+.modal.modal-wide{width:min(100%,760px)}
+.auth-tabs{display:flex;gap:8px;border-bottom:1px solid var(--line);margin:18px 0 15px}
+.auth-tabs button{border:0;border-bottom:2px solid transparent;background:transparent;padding:10px 14px;color:#79817c;font:600 13px var(--sans);cursor:pointer}
+.auth-tabs button.selected{border-color:#739b60;color:#283a30}
+.stacked-label{display:block;margin:12px 0;font-size:12px;font-weight:600;color:#59615b}
+.stacked-label input,.multi-city-leg input{display:block;width:100%;padding:12px;margin-top:6px;border:1px solid #dfe4dd;border-radius:7px;font:14px var(--sans);color:var(--ink);background:#fff}
+.form-hint{display:block;color:#818a83;font-size:12px;margin:0 0 9px}
+.form-message{padding:11px 13px;margin:12px 0;border-radius:7px;background:#fff2ef;color:#9d4a3d;font-size:13px;line-height:1.5}
+.demo-consent{display:flex;gap:10px;align-items:flex-start;margin-top:15px;color:#647067;font-size:12px;line-height:1.5}
+.demo-consent input{margin-top:3px;accent-color:#759d5d}
+.traveler-list{display:grid;gap:10px}
+.traveler-panel{padding:12px 14px;background:#fbfcf9;border:1px solid #e9ede6;border-radius:8px}
+.traveler-panel h3{font:700 13px var(--sans);margin:0 0 8px;color:#374239}
+.contact-fields{margin-top:12px}
+.modal-flight hr{border:0;border-top:1px solid #e2e8df;margin:12px 0}
+.booking-confirm-card{padding:20px;background:#f5f8f1;border:1px solid #e3ecd9;border-radius:10px;margin:17px 0}
+.booking-reference-label{font-size:10px;letter-spacing:1.5px;font-weight:700;color:#7e897c}
+.booking-reference{font:800 25px var(--display);letter-spacing:1px;margin:4px 0 9px;color:#243e32}
+.status-pill{display:inline-flex;padding:5px 9px;border-radius:999px;background:#e3f1d8;color:#486b3d;font-size:11px;font-weight:700}
+.status-pill.status-cancelled{background:#f5e8e5;color:#905348}
+.booking-confirm-route{margin-top:15px;color:#3d4840;font-size:14px;line-height:1.75}
+.booking-confirm-meta{font-size:12px;color:#768077;margin-top:10px}
+.demo-notice{padding:11px 13px;background:#f7f7f3;border-radius:7px}
+.modal-actions{display:flex;gap:10px;margin-top:12px}
+.modal-actions .confirm-btn{margin-top:0;flex:1}
+.secondary-btn,.signout-btn{padding:12px 15px;border:1px solid #dce2d9;background:#fff;border-radius:7px;color:#405045;font:700 12px var(--sans);cursor:pointer}
+.secondary-btn:hover,.signout-btn:hover{background:#f6f8f3}
+.signout-btn{color:#8c5044}
+.account-email{padding:9px 0;color:#778078;font-size:12px}
+.account-email strong{color:#354139}
+.password-panel{margin:8px 0 16px;padding:12px 14px;background:#f8faf5;border:1px solid #e7ece2;border-radius:8px}
+.password-panel summary{color:#405045;font-size:12px;font-weight:700;cursor:pointer}
+.password-panel form{padding-top:5px}
+.account-section-heading{display:flex;align-items:center;justify-content:space-between;margin:23px 0 10px}
+.account-section-heading h3{font:700 17px var(--display);margin:0}
+.account-section-heading span{color:#7e877f;font-size:12px}
+.account-bookings-list{display:grid;gap:10px;max-height:290px;overflow:auto;padding-right:3px}
+.account-booking{border:1px solid #e6eae3;background:#fff;border-radius:9px;padding:14px}
+.account-booking-top,.account-booking-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.account-booking-top strong{font:800 14px var(--display);letter-spacing:.4px}
+.account-booking-route{margin:11px 0 5px;color:#39443b;font-size:13px;line-height:1.7}
+.account-booking-meta{color:#7c857c;font-size:12px}
+.account-booking-bottom{border-top:1px solid #edf0eb;margin-top:10px;padding-top:9px;color:#879087}
+.account-booking-bottom small{font-size:11px;overflow-wrap:anywhere}
+.cancel-booking{border:0;background:transparent;color:#99574b;font:600 11px var(--sans);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.lookup-form{padding-bottom:9px}
+.full-width{width:100%;margin-top:12px}
+.multi-city-legs{grid-column:1/-2;display:grid;gap:9px;padding:0 4px 4px}
+.multi-city-leg{display:grid;grid-template-columns:1fr 1fr 1fr auto;align-items:end;gap:10px;padding:12px;background:#f8faf5;border:1px solid #e7ece2;border-radius:8px;position:relative}
+.multi-city-title{grid-column:1/-1;color:#7c8e74;font-size:9px;font-weight:700;letter-spacing:1.3px}
+.multi-city-leg label{display:block;color:#879087;font-size:9px;letter-spacing:1px;font-weight:700}
+.multi-city-leg input{font-size:13px;padding:9px 10px;margin-top:5px}
+.remove-leg{border:0;background:#edf1e8;color:#76866f;border-radius:50%;width:31px;height:31px;font-size:21px;cursor:pointer}
+.add-leg{grid-column:1/-2;justify-self:start;padding:8px 10px;border:1px dashed #bdcbb4;border-radius:7px;background:white;color:#58714e;font:600 12px var(--sans);cursor:pointer}
+.multi-result{display:block}
+.multi-result-head{display:flex;justify-content:space-between;align-items:center}
+.multi-result-legs{display:grid;gap:0;margin:15px 0}
+.multi-result-leg{display:flex;gap:12px;align-items:flex-start;border-top:1px solid #eef0ec;padding:11px 0}
+.leg-index{display:grid;place-items:center;flex:0 0 24px;height:24px;border-radius:50%;background:#eef3e8;color:#56704c;font-size:11px;font-weight:700}
+.multi-result-leg strong,.multi-result-leg small{display:block}
+.multi-result-leg strong{font-size:13px;color:#354139}
+.multi-result-leg small{font-size:11px;color:#818981;margin-top:4px}
+.multi-result>.book-btn{display:block;margin-left:auto}
+@media(max-width:900px){.multi-city-legs,.add-leg{grid-column:1/-1}}
+@media(max-width:620px){.modal-actions{flex-direction:column}.multi-city-leg{grid-template-columns:1fr 1fr;gap:9px}.multi-city-title{grid-column:1/-1}.remove-leg{position:absolute;right:8px;top:7px}.multi-city-legs,.add-leg{grid-column:1/-1}.account-booking-bottom{align-items:flex-start;flex-direction:column}.modal-wide{padding:22px 17px}}

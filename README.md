@@ -1,21 +1,27 @@
-# Skyway flight booking
+# Skyway flight booking demo
 
-Responsive flight booking website built with HTML, CSS and vanilla JavaScript. The runnable backend uses Node.js 24+ and SQLite. PHP/MySQL deployment files are included as an alternate stack.
+Responsive HTML/CSS/JavaScript flight-booking demo with a Node.js 24 and SQLite backend. The Render service uses the free plan and stores its SQLite file on the service filesystem.
+
+## Included flows
+
+- Flight search for round trips, one-way trips, and multi-city trips (2–4 legs) with generated sample fares.
+- Account registration, sign-in, profile and password changes, sign-out, salted `scrypt` password hashes, and seven-day `HttpOnly` session cookies.
+- Guest booking and signed-in booking, with up to nine traveler names and a booking contact.
+- Confirmed demo booking references, account booking history, guest booking lookup by reference and email, and demo cancellation.
+- Newsletter signups stored in SQLite.
 
 ## Run locally
 
-From this folder, run `node server.mjs`, then open `http://127.0.0.1:4173` on the same computer. Search results and pending booking requests are saved in `data/skyway.sqlite`.
+Requires Node.js 24 or later. From this folder run `node server.mjs`, then open `http://127.0.0.1:4173`. SQLite data is stored in `data/skyway.sqlite` by default. Set `DATA_DIR` to choose another data directory.
 
-## Free demo deployment on Render
+## Render deployment
 
-The included `render.yaml` uses Render's free web service tier. Add this folder to a GitHub repository, connect that repo to Render as a Blueprint, and deploy. Render provides the public URL after the first successful deploy. The free tier can spin down while idle and its filesystem is ephemeral, so booking records are temporary and may disappear on restarts or deploys. Do not use this tier for real bookings.
+`render.yaml` configures a free Node web service. Free Render instances can sleep while idle and have ephemeral filesystems, so accounts and booking records can be cleared by a restart or redeploy. This tier is for demos only.
 
-For persistent local SQLite storage, use a paid Render web service with a persistent disk mounted at the app's `data` folder. The service listens on the host-provided `PORT` and binds to `0.0.0.0`. Alternatively, switch to a managed database for a production architecture.
+## Real booking limitations
 
-## Deploy the PHP/MySQL version
+Fares and schedules are generated examples. “Confirmed” means confirmed inside this demo only: the app does not charge payment, reserve airline inventory, issue a PNR or ticket, or send email. Account creation does not verify email and password reset email is not configured. Before taking real bookings, connect an authorized airline/GDS inventory provider, payment processor, persistent managed database, email delivery service, and the applicable operational and legal workflows.
 
-Import `schema.sql` into MySQL, configure `DB_HOST`, `DB_NAME`, `DB_USER` and `DB_PASS`, and serve this folder through Apache with PHP and `mod_rewrite` enabled. `.htaccess` maps `/api/search` and `/api/book` to `api.php`.
+## PHP/MySQL starter files
 
-## Scope
-
-The included flight results are sample fares, and bookings are saved as pending requests. This project does not charge payment, issue airline tickets, authenticate travelers, or connect to live airline inventory. Connect an authorized inventory provider and a payment processor before accepting real bookings. Fonts and destination photography are loaded from external providers.
+`api.php` and `schema.sql` are a separate basic search and booking-request starter for PHP/MySQL. The deployed Node demo uses `server.mjs` and SQLite; the account/session flows described above are implemented in that Node app.
