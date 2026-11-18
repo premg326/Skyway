@@ -136,7 +136,8 @@ function makeFlight(segment, planIndex, cabin) {
   const fromCode=airportCode(origin), toCode=airportCode(destination);
   const id=`${fromCode}-${toCode}-${date}-${planIndex+1}-${cabin.toLowerCase().replace(/[^a-z]/g,'')}`;
   const base=p[6]+(fromCode.charCodeAt(0)%8)*12+(toCode.charCodeAt(1)%7)*9;
-  const price=Math.round(base*cabinFactor(cabin)*100)/100;
+  const travelDay=new Date(`${date}T00:00:00.000Z`), dateShift=((travelDay.getUTCDate()*11+travelDay.getUTCDay()*17)%8)*13;
+  const price=Math.round((base+dateShift)*cabinFactor(cabin)*100)/100;
   const flight={id,airline:p[0],flight_number:p[1],origin,destination,departure_time:`${date}T${p[2]}:00`,arrival_time:`${date}T${p[3]}:00`,duration:p[4],stops:p[5],price,currency:'USD',cabin};
   flightUpsert.run(flight.id,flight.airline,flight.flight_number,flight.origin,flight.destination,flight.departure_time,flight.arrival_time,flight.duration,flight.stops,flight.price,flight.currency,flight.cabin);
   return flight;
@@ -216,6 +217,24 @@ const server=createServer(async(req,res)=>{
       }
       const flights=plans.map((_,i)=>makeFlight({origin,destination,depart_date:depart},i,cabin));
       return send(res,200,{flights});
+    }
+    if (req.method==='POST' && path==='/api/flexible-dates') {
+      const q=await body(req), origin=clean(q.origin), destination=clean(q.destination), depart=clean(q.depart_date,10), returnDate=clean(q.return_date,10);
+      const cabin=clean(q.cabin,40)||'Economy', trip=q.trip_type==='oneway'?'oneway':'roundtrip', passengers=Number(q.passengers);
+      if(!origin||!destination||airportCode(origin)===airportCode(destination)||!validDate(depart))return send(res,422,{error:'Enter a valid route and departure date.'});
+      if(!cabins.has(cabin)||!Number.isInteger(passengers)||passengers<1||passengers>9)return send(res,422,{error:'Choose valid traveler and cabin options.'});
+      if(trip==='roundtrip'&&(!validDate(returnDate)||returnDate<depart))return send(res,422,{error:'Choose a valid return date.'});
+      const shiftDate=(value,days)=>{const date=new Date(`${value}T00:00:00.000Z`);date.setUTCDate(date.getUTCDate()+days);return date.toISOString().slice(0,10)};
+      const today=new Date().toISOString().slice(0,10), stayLength=trip==='roundtrip'?Math.round((new Date(`${returnDate}T00:00:00.000Z`)-new Date(`${depart}T00:00:00.000Z`))/86400000):0;
+      const fares=[];
+      for(let offset=-3;offset<=3;offset++){
+        const date=shiftDate(depart,offset);if(date<today)continue;
+        const flights=plans.map((_,i)=>makeFlight({origin,destination,depart_date:date},i,cabin));
+        const perTraveler=Math.min(...flights.map((flight)=>flight.price))*(trip==='roundtrip'?1.82:1);
+        fares.push({depart_date:date,return_date:trip==='roundtrip'?shiftDate(date,stayLength):'',total:Math.round(perTraveler*passengers*100)/100,currency:'USD'});
+      }
+      const lowest=Math.min(...fares.map((fare)=>fare.total));
+      return send(res,200,{fares:fares.map((fare)=>({...fare,is_lowest:fare.total===lowest}))});
     }
     if (req.method==='POST' && path==='/api/bookings') {
       const q=await body(req), account=currentAccount(req), trip=q.trip_type==='oneway'?'oneway':q.trip_type==='multicity'?'multicity':'roundtrip';

@@ -13,7 +13,7 @@ async function api(path,{method='GET',data}={}){
   const options={method,credentials:'same-origin',headers:{'accept':'application/json'}};
   if(data!==undefined){options.headers['content-type']='application/json';options.body=JSON.stringify(data)}
   const response=await fetch(path,options);let payload={};try{payload=await response.json()}catch{}
-  if(!response.ok)throw Error(payload.error||`Request failed (${response.status}).`);
+  if(!response.ok){const error=Error(payload.error||`Request failed (${response.status}).`);error.status=response.status;throw error}
   return payload;
 }
 function showModal(markup,wide=false){$('.modal').classList.toggle('modal-wide',wide);$('#modalContent').innerHTML=markup;$('#bookingModal').classList.remove('hidden')}
@@ -62,8 +62,20 @@ $('#searchForm').addEventListener('submit',async e=>{
   $('#results').scrollIntoView({behavior:'smooth',block:'start'});
   try{const result=await api('/api/search',{method:'POST',data:q});flights=result.flights||[]}
   catch(error){flights=makeDemoFlights(q);toast(`${error.message} Showing preview fares.`)}
-  renderFlights(q);
+  renderFlights(q);loadFlexibleDates(q);
 });
+let flexDateRequest=0;
+async function loadFlexibleDates(q){
+  const panel=$('#flexDatePanel'),options=$('#flexDateOptions'),request=++flexDateRequest;
+  if(q.trip_type==='multicity'){panel.classList.add('hidden');return}
+  panel.classList.remove('hidden');options.innerHTML='<div class="flex-date-loading">Comparing seven nearby dates…</div>';
+  try{
+    const result=await api('/api/flexible-dates',{method:'POST',data:q});if(request!==flexDateRequest)return;
+    const fares=result.fares||[];if(!fares.length){panel.classList.add('hidden');return}
+    options.innerHTML=fares.map(fare=>{const d=new Date(`${fare.depart_date}T12:00:00`),label=d.toLocaleDateString('en-US',{weekday:'short'}),dateLabel=d.toLocaleDateString('en-US',{month:'short',day:'numeric'}),selected=fare.depart_date===q.depart_date;return `<button type="button" class="flex-date-card ${fare.is_lowest?'is-lowest':''} ${selected?'is-selected':''}" data-flex-depart="${esc(fare.depart_date)}" data-flex-return="${esc(fare.return_date)}" aria-label="Select ${label}, ${dateLabel}, total ${currency(fare.currency)}${Number(fare.total).toLocaleString()} for ${q.passengers} traveler${q.passengers==='1'?'':'s'}"><span class="flex-date-day">${esc(label)}</span><strong>${esc(dateLabel)}</strong><span class="flex-date-price">${currency(fare.currency)}${Number(fare.total).toLocaleString()}</span>${fare.is_lowest?'<span class="flex-date-best">LOWEST</span>':''}</button>`}).join('');
+  }catch{if(request===flexDateRequest)panel.classList.add('hidden')}
+}
+$('#flexDateOptions').addEventListener('click',event=>{const card=event.target.closest('[data-flex-depart]');if(!card)return;depart.value=card.dataset.flexDepart;if(tripType==='roundtrip')ret.value=card.dataset.flexReturn;depart.dispatchEvent(new Event('change'));$('#searchForm').requestSubmit()});
 function makeDemoFlights(q){return ['Northstar Air','Juniper Airways','Atlas Airlines'].map((name,i)=>({id:`demo-${i+1}`,airline:name,flight_number:['NS 204','JA 718','AT 931'][i],origin:q.origin,destination:q.destination,departure_time:['08:15','11:40','17:25'][i],arrival_time:['16:05','19:30','01:10'][i],duration:['6h 50m','6h 50m','6h 45m'][i],stops:i===1?'1 stop':'Nonstop',price:[489,552,624][i],currency:'USD',cabin:q.cabin}))}
 function timeLabel(value){const raw=String(value??'');const match=raw.match(/(?:T|\s)(\d{2}:\d{2})/);return match?match[1]:raw}
 function renderFlights(q){
@@ -124,7 +136,7 @@ function attachCancelButtons(){
 }
 async function showAccount(){
   if(!account){authView();return}
-  let bookings=[];try{bookings=(await api('/api/bookings')).bookings||[]}catch(error){toast(error.message);return}
+  let bookings=[];try{bookings=(await api('/api/bookings')).bookings||[]}catch(error){if(error.status===401){account=null;updateHeader();authView('login','Your demo sign-in has expired. Sign in again or create a new account. Free demo account data may reset after a service restart.');return}toast(error.message);return}
   const bookingList=bookings.length?bookings.map(b=>bookingCard(b)).join(''):'<div class="empty-state">No bookings yet. Search for a flight to get started.</div>';
   showModal(`<div class="eyebrow dark-eyebrow">MY SKYWAY</div><h2 id="modalTitle">Hello, ${esc(account.first_name)}.</h2><p>Your account bookings and traveler contact details.</p><form id="profileForm" class="profile-form"><div class="booking-fields"><label>First name<input name="first_name" value="${esc(account.first_name)}" required></label><label>Last name<input name="last_name" value="${esc(account.last_name)}" required></label></div><label class="stacked-label">Phone number<input name="phone" type="tel" value="${esc(account.phone||'')}"></label><div class="account-email">Account email: <strong>${esc(account.email)}</strong></div><button class="secondary-btn">Save profile</button></form><details class="password-panel"><summary>Change password</summary><form id="passwordForm"><label class="stacked-label">Current password<input name="current_password" type="password" autocomplete="current-password" required></label><label class="stacked-label">New password<input name="new_password" type="password" autocomplete="new-password" minlength="8" required></label><button class="secondary-btn">Update password</button></form></details><div class="account-section-heading"><h3>My bookings</h3><span>${bookings.length} total</span></div><div class="account-bookings-list">${bookingList}</div><div class="modal-actions"><button type="button" class="secondary-btn" id="manageGuest">Manage a booking</button><button type="button" class="signout-btn" id="signOut">Sign out</button></div>`,true);
   attachCancelButtons();
@@ -140,8 +152,8 @@ function showManage(){
   $('#signInFromManage').addEventListener('click',()=>authView());
 }
 
-$('#signInBtn').addEventListener('click',()=>account?showAccount():authView());
-$('#manageBtn').addEventListener('click',()=>showManage());
+$('#signInBtn').addEventListener('click',async()=>{const wasSignedIn=!!account;await loadAccount();if(account)showAccount();else authView('login',wasSignedIn?'Your demo sign-in has expired. Sign in again or create a new account. Free demo account data may reset after a service restart.':'')});
+$('#manageBtn').addEventListener('click',async()=>{const wasSignedIn=!!account;await loadAccount();if(wasSignedIn&&!account){authView('login','Your demo sign-in has expired. Sign in again or create a new account. Free demo account data may reset after a service restart.');return}showManage()});
 $('#closeModal').addEventListener('click',closeModal);
 $('#bookingModal').addEventListener('click',e=>{if(e.target.id==='bookingModal')closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
