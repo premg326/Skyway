@@ -154,11 +154,15 @@ function showManage(){
 
 $('#signInBtn').addEventListener('click',async()=>{const wasSignedIn=!!account;await loadAccount();if(account)showAccount();else authView('login',wasSignedIn?'Your demo sign-in has expired. Sign in again or create a new account. Free demo account data may reset after a service restart.':'')});
 $('#manageBtn').addEventListener('click',async()=>{const wasSignedIn=!!account;await loadAccount();if(wasSignedIn&&!account){authView('login','Your demo sign-in has expired. Sign in again or create a new account. Free demo account data may reset after a service restart.');return}showManage()});
+const navLinks=$$('.main-nav a');
+function setNavActive(link){navLinks.forEach(item=>item.classList.toggle('active',item===link));$('.main-nav').classList.remove('open')}
+navLinks.forEach(link=>link.addEventListener('click',()=>{document.body.classList.toggle('explore-active',link.hash==='#explore');setNavActive(link)}));
+if(location.hash==='#explore'){document.body.classList.add('explore-active');setNavActive($('.main-nav a[href="#explore"]'))}
 $('#closeModal').addEventListener('click',closeModal);
 $('#bookingModal').addEventListener('click',e=>{if(e.target.id==='bookingModal')closeModal()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
 $('#editSearch').addEventListener('click',()=>$('#search').scrollIntoView({behavior:'smooth'}));
-$$('.destination-card').forEach(c=>c.addEventListener('click',()=>{$('#destination').value=c.dataset.place;$('#search').scrollIntoView({behavior:'smooth'});$('#destination').focus()}));
+$$('.destination-card').forEach(c=>c.addEventListener('click',()=>{$('#destination').value=c.dataset.place;document.body.classList.remove('explore-active');setNavActive($('.main-nav a[href="#search"]'));setTrip('roundtrip');history.replaceState(null,'','#search');$('#searchForm').requestSubmit()}));
 $('#menuBtn').addEventListener('click',()=>$('.main-nav').classList.toggle('open'));
 $('#newsletterForm').addEventListener('submit',async e=>{e.preventDefault();const email=e.currentTarget.querySelector('input').value;try{const data=await api('/api/newsletter',{method:'POST',data:{email}});toast(data.message)}catch(error){toast(error.message)}e.currentTarget.reset()});
 loadAccount();

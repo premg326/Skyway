@@ -6,6 +6,7 @@ Responsive HTML/CSS/JavaScript flight-booking demo with a Node.js 24 and SQLite 
 
 - Flight search for round trips, one-way trips, and multi-city trips (2–4 legs) with generated sample fares.
 - Seven-day flexible-date fare comparison with one-click date switching; the displayed prices are illustrative demo estimates.
+- Dedicated Explore view with destination cards that launch a sample flight search when selected.
 - Account registration, sign-in, profile and password changes, sign-out, salted `scrypt` password hashes, and seven-day `HttpOnly` session cookies.
 - Guest booking and signed-in booking, with up to nine traveler names and a booking contact.
 - Confirmed demo booking references, account booking history, guest booking lookup by reference and email, and demo cancellation.

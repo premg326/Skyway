@@ -105,3 +105,16 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .flex-date-loading{grid-column:1/-1;padding:14px;color:#7d867d;font-size:11px}
 @media(max-width:700px){.flex-date-options{grid-template-columns:repeat(4,minmax(70px,1fr))}.flex-date-heading{flex-direction:column}.flex-date-note{align-self:flex-start}}
 @media(max-width:420px){.flex-date-options{grid-template-columns:repeat(3,minmax(70px,1fr))}.flex-date-card{min-height:83px;padding:9px}}
+.explore-view{min-height:calc(100vh - 155px);padding-top:52px;padding-bottom:78px}
+.explore-view .section-heading{margin-bottom:10px}
+.explore-demo-note{font-size:10px;color:#7d8878;background:#eff4e9;border-radius:999px;padding:7px 10px}
+.explore-intro{margin:0 0 24px;color:#788179;font-size:13px;line-height:1.7;max-width:560px}
+.explore-view .destination-grid{gap:18px}
+.destination-card{cursor:pointer;isolation:isolate;box-shadow:0 12px 28px #13271b16}
+.destination-card:focus-visible{outline:4px solid #96bd69;outline-offset:4px}
+.destination-card:hover .card-info{transform:translateY(-4px)}
+.card-info{transition:transform .2s ease}
+.card-info small{max-width:100%;white-space:nowrap}
+body.explore-active main>section:not(.explore-view){display:none!important}
+body.explore-active main>.explore-view{display:block!important}
+@media(max-width:620px){.explore-view{min-height:calc(100vh - 140px);padding-top:38px;padding-bottom:54px}.explore-demo-note{font-size:8px;padding:6px 8px}.explore-intro{font-size:11px;margin-bottom:19px}.explore-view .destination-grid{gap:11px}.card-info small{font-size:8px}}
